@@ -1,0 +1,19 @@
+{% load mptt_tags %}
+{% load my_tags %}
+
+<ul>
+{% recursetree menu_items %}
+    {% if node.is_leaf_node %}
+        <li{% if node.url == active_url %} class="active"{% endif %}><a href="{{ node.url }}">{{ node.name }}</a></li>
+    {% else %}
+        <li{% if node.get_descendants.include.active and not node.is_root_node %} class="expanded"{% endif %}>
+            <a href="{{ node.url }}"{% if node.get_descendants.include.active %} class="active"{% endif %}>{{ node.name }}</a>
+            {% if not node.is_root_node %}
+                <ul>
+                    {{ children }}
+                </ul>
+            {% endif %}
+        </li>
+    {% endif %}
+{% endrecursetree %}
+</ul>
